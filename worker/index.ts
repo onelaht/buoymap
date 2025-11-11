@@ -21,7 +21,7 @@ export default {
   },
 
     // fetch station table via crons
-    async scheduled(controller:ScheduledController, env:Env, ctx:ExecutionContext) {
+    async scheduled(_controller:ScheduledController, env:Env, ctx:ExecutionContext) {
         const u = updater(env.app_db)
         ctx.waitUntil(u.updateStation())
     }
