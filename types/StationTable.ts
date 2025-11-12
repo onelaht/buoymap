@@ -5,8 +5,8 @@ export type StationTableUpsert = {
     hull: string;
     name: string;
     payload: string;
-    location: string;
-    timezone: string | number[];
+    location: string | number[];
+    timezone: string;
     forecast: string;
     note: string;
 }
