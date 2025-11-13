@@ -14,7 +14,7 @@ export default {
     const path = url.pathname;
 
     // retrieve stations_table
-    if(path == "/api/stations/" && method == "GET") {
+    if(path === "/api/stations/" && method === "GET") {
         const r = retriever(env.app_db);
         const test = await r.retrieveStations()
         return new Response(JSON.stringify(test), {
@@ -22,11 +22,22 @@ export default {
             headers: {"Context-Type": "application/json"}
         });
     }
+
+    // local debug
+    if(path === "/api/crons/" && method === "GET") {
+        const d = updater(env.app_db)
+        await d.updateStation();
+        return new Response(JSON.stringify("k"), {
+            status: 200,
+            headers: {"Context-Type": "application/json"}
+        });
+    }
+
     return new Response(null, { status: 404 });
   },
     // fetch station table via crons
-    async scheduled(_controller:ScheduledController, env:Env, ctx:ExecutionContext) {
+    async scheduled(_controller:ScheduledController, env:Env) {
         const u = updater(env.app_db)
-        ctx.waitUntil(u.updateStation())
+        await u.updateStation();
     }
 } satisfies ExportedHandler<Env>;
