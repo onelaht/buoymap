@@ -1,16 +1,16 @@
 // db access
 import {stations} from "./db/stations.ts";
 // types
-import type {StationTableTuple} from "../types/StationTable.ts";
+import type {StationTable} from "../types/StationTable.ts";
 
 export function retriever(db:D1Database) {
     // initialize stations table
     const db_stations = stations(db);
 
     // extract stations and normalize location
-    async function retrieveStations():Promise<StationTableTuple[]> {
+    async function retrieveStations():Promise<StationTable[]> {
         // get all tuples from station table
-        const stations:StationTableTuple[] = await db_stations.getAll();
+        const stations:StationTable[] = await db_stations.getAll();
         // traverse through all stations and normalize location
         stations.forEach((s) => {
             s.location = normalizeLocation(s.location as string);
