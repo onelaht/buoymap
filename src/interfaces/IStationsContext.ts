@@ -13,5 +13,5 @@ export interface IStationsContext {
     selOwners: Map<StationTable["owner_name"], boolean>;
     setSelOwners: React.Dispatch<React.SetStateAction<Map<StationTable["owner_name"], boolean>>>;
     filteredStations: StationTable[];
-    setFilteredStations: React.Dispatch<React.SetStateAction<StationTable[]>>
+    getCount: (checks:Map<string, boolean>)=>number;
 }
