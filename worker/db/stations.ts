@@ -1,4 +1,4 @@
-import type {Station} from "../../types/Station.ts";
+import type {IStation} from "../../types/IStation.ts";
 
 export function stations(db:D1Database) {
     // upsert tuples
@@ -48,12 +48,12 @@ export function stations(db:D1Database) {
         }
     }
     // returns all existing stations in stations table
-    async function getAll():Promise<Station[]> {
+    async function getAll():Promise<IStation[]> {
         const res = await db
             .prepare(
                 "SELECT *" +
                 "FROM stations")
-            .all<Station>();
+            .all<IStation>();
         return res?.results ?? [];
     }
     return {batchUpsert, getAll};
