@@ -1,5 +1,4 @@
-export type StationTable = {
-    station_id: string;
+export interface IStationData {
     ttype: string;
     hull: string;
     station_name: string;
