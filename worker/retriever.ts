@@ -2,6 +2,7 @@
 import type {IStation} from "../types/IStation.ts";
 import type {IStationData} from "../types/IStationData.ts";
 import type {IStationTuple} from "../types/IStationTuple.ts";
+import type {IMeteorologicalData} from "../types/IMeteorologicalData";
 
 export function retriever(db:D1Database) {
     // extract stations and normalize location
@@ -29,13 +30,70 @@ export function retriever(db:D1Database) {
         return res?.results ?? [];
     }
 
-
-    return {retrieveStations, getUniqueCountries, getUniqueOwners};
+    //
+    async function getMeteorologicalData(stationID: string):Promise<IMeteorologicalData> {
+        const data:IMeteorologicalData = {
+            label: [],
+            wdir: [],
+            wspd: [],
+            gst: [],
+            wvht: [],
+            dpd: [],
+            apd: [],
+            mwd: [],
+            pres: [],
+            atmp: [],
+            wtmp: [],
+            dewp: [],
+            vis: [],
+            ptdy: [],
+            tide: [],
+        };
+        // get data
+        const req = await fetchData(`https://www.ndbc.noaa.gov/data/5day2/${stationID}_5day.txt`);
+        // return empty arr if empty
+        if(req.length > 2) {
+            for (let i = 2; i < req.length; i++) {
+                // split attributes (based on tab or space)
+                const tup = req[i].split(/\s+/);
+                // push data
+                data.label.push(`${tup[0]}-${tup[1]}-${tup[2]}-${tup[3]}-${tup[4]}-${tup[5]}`);
+                data.wdir.push(parseInt(tup[5]));
+                data.wspd.push(parseFloat(tup[6]));
+                data.gst.push(tup[7] === "MM" ? undefined : parseFloat(tup[7]));
+                data.gst.push(tup[8] === "MM" ? undefined : parseFloat(tup[8]));
+                data.wvht.push(tup[9] === "MM" ? undefined : parseFloat(tup[9]));
+                data.dpd.push(tup[10] === "MM" ? undefined : parseFloat(tup[10]));
+                data.apd.push(tup[11] === "MM" ? undefined : parseFloat(tup[11]));
+                data.mwd.push(tup[12] === "MM" ? undefined : parseFloat(tup[12]));
+                data.pres.push(tup[13] === "MM" ? undefined : parseFloat(tup[13]));
+                data.atmp.push(tup[14] === "MM" ? undefined : parseFloat(tup[14]));
+                data.wtmp.push(tup[15] === "MM" ? undefined : parseFloat(tup[15]));
+                data.dewp.push(tup[16] === "MM" ? undefined : parseFloat(tup[16]));
+                data.vis.push(tup[17] === "MM" ? undefined : parseFloat(tup[17]));
+                data.ptdy.push(tup[18]);
+                data.tide.push(tup[19] === "MM" ? undefined : parseFloat(tup[19]));
+            }
+        }
+        return data;
+    }
+    return {retrieveStations, getUniqueCountries, getUniqueOwners, getMeteorologicalData};
 }
 
 //--------------------------------
 //    helpers
 //--------------------------------
+
+// fetches data from NDBC
+// returns data as an array of split tuples
+async function fetchData(input:string) {
+    const res = await fetch(input)
+    if(res.ok) {
+        const text = await res.text();
+        return text.split("\n");
+    } else
+        return [];
+}
 
 // convert location to lat/lon
 function normalizeLocation(location:string):number[] {

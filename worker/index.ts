@@ -37,6 +37,17 @@ export default {
             headers: {"Context-Type": "application/json"}
         });
     }
+    // test
+    if(path === "/api/getMeteorological/" && method === "POST") {
+        const reqBody = await readReqBody(request);
+        const r = retriever(env.app_db);
+        const data = await r.getMeteorologicalData(reqBody);
+        console.log(data);
+        return new Response(JSON.stringify(data), {
+            status: 200,
+            headers: {"Context-Type": "application/json"}
+        })
+    }
 
     return new Response(null, { status: 404 });
   },
@@ -46,3 +57,11 @@ export default {
         await u.updateStation();
     }
 } satisfies ExportedHandler<Env>;
+
+async function readReqBody(req:Request) {
+    const contentType = req.headers.get("content-type");
+    if(contentType?.includes("application/json")) {
+        return JSON.stringify(await req.json());
+    }
+    return "";
+}
