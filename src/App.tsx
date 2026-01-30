@@ -14,7 +14,7 @@ import MapLayer from "./FLComponents/MapLayer.tsx";
 import ProviderApp from "./Providers/ProviderApp.tsx";
 import Filters from "./FLComponents/Filters.tsx";
 import StationData from "./FLComponents/StationData.tsx";
-import Meteorological from "./FLComponents/Meteorological.tsx";
+import MeteorologicalChart from "./FLComponents/MeteorologicalChart.tsx";
 
 
 function AppInner() {
@@ -28,8 +28,8 @@ function AppInner() {
             return <Filters/>
         if(component === "Station Data")
             return <StationData/>
-        if(component === "Meteorological")
-            return <Meteorological/>
+        if(component === "MeteorologicalChart")
+            return <MeteorologicalChart/>
         if(component === "Placeholder") {
             return <div>{node.getName()}</div>
         }

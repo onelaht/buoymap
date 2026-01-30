@@ -42,8 +42,8 @@ export const Layout1:IJsonModel =  {
                     },
                     {
                         type: "tab",
-                        name: "Meteorological",
-                        component: "Meteorological",
+                        name: "Meteorological (Chart)",
+                        component: "MeteorologicalChart",
                     }
                 ]
             },
