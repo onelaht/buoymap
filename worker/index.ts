@@ -37,12 +37,12 @@ export default {
             headers: {"Context-Type": "application/json"}
         });
     }
-    // test
+
+    // return meteorological data based provided station id
     if(path === "/api/getMeteorological/" && method === "POST") {
-        const reqBody = await readReqBody(request);
+        const stationID = await getReqStationID(request);
         const r = retriever(env.app_db);
-        const data = await r.getMeteorologicalData(reqBody);
-        console.log(data);
+        const data = await r.getMeteorologicalData(stationID);
         return new Response(JSON.stringify(data), {
             status: 200,
             headers: {"Context-Type": "application/json"}
@@ -58,10 +58,13 @@ export default {
     }
 } satisfies ExportedHandler<Env>;
 
-async function readReqBody(req:Request) {
+// extracts station id sent via client
+// - returns empty string if no data exists
+async function getReqStationID(req:Request) {
     const contentType = req.headers.get("content-type");
     if(contentType?.includes("application/json")) {
-        return JSON.stringify(await req.json());
+        const stationID:{data: string} = await req.json();
+        return stationID?.data ?? ""
     }
     return "";
 }
