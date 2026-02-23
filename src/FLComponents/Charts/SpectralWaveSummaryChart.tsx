@@ -20,10 +20,10 @@ import {useLocation} from "react-router-dom";
 // MUI components
 import {Box} from "@mui/material";
 // types and interfaces
-import type {IMeteorologicalData} from "../../../types/IMeteorologicalData.ts";
+import type {IWaveSummaryData} from "../../../types/IWaveSummaryData.ts";
 // child component
-import MeteorologicalChartLoader from "../Loader/ChartLoader/MeteorologicalChartLoader.tsx";
 import PromptUser from "../Additional/PromptUser.tsx";
+import SpectralWaveSummaryChartLoader from "../Loader/ChartLoader/SpectralWaveSummaryChartLoader.tsx";
 
 ChartJS.register(
     LinearScale,
@@ -37,11 +37,11 @@ ChartJS.register(
     BarController
 );
 
-export default function MeteorologicalChart() {
+export default function SpectralWaveSummaryChart() {
     // get router path
     const {pathname} = useLocation();
     // meteor data set used for chartjs
-    const [typeData, setTypeData] = useState<IMeteorologicalData[]>([]);
+    const [typeData, setTypeData] = useState<IWaveSummaryData[]>([]);
     // determine if data fetch is completed
     const [isFetched, setIsFetched] = useState(false);
     // chartjs config
@@ -51,43 +51,43 @@ export default function MeteorologicalChart() {
                 datasets: [
             {
                 type: "line" as const,
-                label: "Wind Direction (degT)",
+                label: "Wind Height (m)",
                 borderColor: "rgb(255, 0, 0)",
-                borderWidth: 1,
-                fill: false,
-                data: typeData?.map(i => i.wdir),
-            },
-            {
-                type: "line" as const,
-                label: "Wind Speed (m/s)",
-                borderColor: "rgb(0, 0, 255)",
-                borderWidth: 1,
-                fill: false,
-                data: typeData?.map(i => i.wspd),
-            },
-            {
-                type: "line" as const,
-                label: "Gust (m/s)",
-                borderColor: "rgb(0, 0, 0)",
-                borderWidth: 1,
-                fill: false,
-                data: typeData?.map(i => i.gst),
-            },
-            {
-                type: "line" as const,
-                label: "Wave Height (m)",
-                borderColor: "rgb(128, 0, 128)",
                 borderWidth: 1,
                 fill: false,
                 data: typeData?.map(i => i.wvht),
             },
             {
                 type: "line" as const,
-                label: "Dominant Wave Period (sec)",
+                label: "Swell Height (m)",
+                borderColor: "rgb(0, 0, 255)",
+                borderWidth: 1,
+                fill: false,
+                data: typeData?.map(i => i.swh),
+            },
+            {
+                type: "line" as const,
+                label: "Swell Period (sec)",
+                borderColor: "rgb(0, 0, 0)",
+                borderWidth: 1,
+                fill: false,
+                data: typeData?.map(i => i.swp),
+            },
+            {
+                type: "line" as const,
+                label: "Wind Wave Height (m)",
+                borderColor: "rgb(128, 0, 128)",
+                borderWidth: 1,
+                fill: false,
+                data: typeData?.map(i => i.wwh),
+            },
+            {
+                type: "line" as const,
+                label: "Wind Wave Period (sec)",
                 borderColor: "rgb(0, 255, 0)",
                 borderWidth: 1,
                 fill: false,
-                data: typeData?.map(i => i.dpd),
+                data: typeData?.map(i => i.wwp),
             },
             {
                 type: "line" as const,
@@ -105,64 +105,7 @@ export default function MeteorologicalChart() {
                 fill: false,
                 data: typeData?.map(i => i.mwd),
             },
-            {
-                type: "line" as const,
-                label: "Sea Level Pressure (hPa)",
-                borderColor: "rgb(128, 255, 128)",
-                borderWidth: 1,
-                fill: false,
-                data: typeData?.map(i => i.pres),
-            },
-            {
-                type: "line" as const,
-                label: "Air Temperature (degC)",
-                borderColor: "rgb(255, 128, 128)",
-                borderWidth: 1,
-                fill: false,
-                data: typeData?.map(i => i.atmp),
-            },
-            {
-                type: "line" as const,
-                label: "Sea Surface Temperature (degC)",
-                borderColor: "rgb(255, 0, 128)",
-                borderWidth: 1,
-                fill: false,
-                data: typeData?.map(i => i.wtmp),
-            },
-            {
-                type: "line" as const,
-                label: "Dew Point Temperature (degC)",
-                borderColor: "rgb(128, 0, 255)",
-                borderWidth: 1,
-                fill: false,
-                data: typeData?.map(i => i.dewp),
-            },
-            {
-                type: "line" as const,
-                label: "Station Visibility (nmi)",
-                borderColor: "rgb(128, 255, )",
-                borderWidth: 1,
-                fill: false,
-                data: typeData?.map(i => i.vis),
-            },
-            {
-                type: "line" as const,
-                label: "Pressure Tendency (hPa)",
-                borderColor: "rgb(255, 128, 64)",
-                borderWidth: 1,
-                fill: false,
-                data: typeData?.map(i => i.ptdy),
-            },
-            {
-                type: "line" as const,
-                label: "Tide (ft)",
-                borderColor: "rgb(128, 255, 128)",
-                borderWidth: 1,
-                fill: false,
-                data: typeData?.map(i => i.tide),
-            },
-        ]
-        }
+        ]}
     }, [typeData])
 
     const options = {
@@ -175,7 +118,7 @@ export default function MeteorologicalChart() {
             {pathname === "/" ?
                 <PromptUser label={"No station selected"}/>
             : !isFetched ?
-                        <MeteorologicalChartLoader
+                        <SpectralWaveSummaryChartLoader
                             setTypeData={(val) => setTypeData(val)}
                             setIsFetched={(val) => setIsFetched(val)} />
                     :

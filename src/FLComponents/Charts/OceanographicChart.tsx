@@ -1,6 +1,6 @@
 // react
 import {useMemo, useState} from "react";
-// ChartJS componeents
+// ChartJS components
 import {
     Chart as ChartJS,
     LinearScale,
@@ -20,10 +20,10 @@ import {useLocation} from "react-router-dom";
 // MUI components
 import {Box} from "@mui/material";
 // types and interfaces
-import type {IMeteorologicalDriftData} from "../../../types/IMeteorologicalDriftData.ts";
+import type {IOceanData} from "../../../types/IOceanData.ts";
 // child component
 import PromptUser from "../Additional/PromptUser.tsx";
-import MeteorologicalDriftChartLoader from "../Loader/ChartLoader/MeteorologicalDriftChartLoader.tsx";
+import OceanographicChartLoader from "../Loader/ChartLoader/OceanographicChartLoader.tsx";
 
 ChartJS.register(
     LinearScale,
@@ -37,124 +37,91 @@ ChartJS.register(
     BarController
 );
 
-export default function MeteorologicalDriftChart() {
+export default function OceanographicChart() {
     // get router path
     const {pathname} = useLocation();
     // meteor data set used for chartjs
-    const [typeData, setTypeTypeData] = useState<IMeteorologicalDriftData[]>([]);
+    const [typeData, setTypeData] = useState<IOceanData[]>([]);
     // determine if data fetch is completed
     const [isFetched, setIsFetched] = useState(false);
     // chartjs config
-    const plotData = useMemo(() => {
+    const data = useMemo(() => {
         return {
             labels: typeData?.map(i => i.label),
                 datasets: [
             {
                 type: "line" as const,
-                label: "Wind Direction (degT)",
+                label: "Depth (m)",
                 borderColor: "rgb(255, 0, 0)",
                 borderWidth: 1,
                 fill: false,
-                data: typeData?.map(i => i.wdir),
+                data: typeData?.map(i => i.depth),
             },
             {
                 type: "line" as const,
-                label: "Latitude (deg)",
+                label: "Ocean Temperature (degC)",
                 borderColor: "rgb(0, 0, 255)",
                 borderWidth: 1,
                 fill: false,
-                data: typeData?.map(i => i.lat),
+                data: typeData?.map(i => i.otmp),
             },
             {
                 type: "line" as const,
-                label: "Longitude (deg)",
+                label: "Conductivity (mS/cm)",
                 borderColor: "rgb(0, 0, 0)",
                 borderWidth: 1,
                 fill: false,
-                data: typeData?.map(i => i.lon),
+                data: typeData?.map(i => i.cond),
             },
             {
                 type: "line" as const,
-                label: "Wind Direction (degT)",
+                label: "Salinity (psu)",
                 borderColor: "rgb(128, 0, 128)",
                 borderWidth: 1,
                 fill: false,
-                data: typeData?.map(i => i.wdir),
+                data: typeData?.map(i => i.sal),
             },
             {
                 type: "line" as const,
-                label: "Wind Speed (m/s)",
+                label: "Oxygen Concentration (ppm)",
                 borderColor: "rgb(0, 255, 0)",
                 borderWidth: 1,
                 fill: false,
-                data: typeData?.map(i => i.wspd),
+                data: typeData?.map(i => i.o2),
             },
             {
                 type: "line" as const,
-                label: "Gust (m/s)",
+                label: "Chlorophyll Concentration (ug/l)",
                 borderColor: "rgb(0, 255, 255)",
                 borderWidth: 1,
                 fill: false,
-                data: typeData?.map(i => i.gst),
+                data: typeData?.map(i => i.clcon),
             },
             {
                 type: "line" as const,
-                label: "Sea Level Pressure (hPa)",
+                label: "Turbidity (FTU)",
                 borderColor: "rgb(0, 128, 255)",
                 borderWidth: 1,
                 fill: false,
-                data: typeData?.map(i => i.pres),
+                data: typeData?.map(i => i.turb),
             },
             {
                 type: "line" as const,
-                label: "Pressure Tendency (hPa)",
+                label: "pH",
                 borderColor: "rgb(128, 255, 128)",
                 borderWidth: 1,
                 fill: false,
-                data: typeData?.map(i => i.ptdy),
+                data: typeData?.map(i => i.ph),
             },
             {
                 type: "line" as const,
-                label: "Air Temperature (degC)",
+                label: "Eh (Oxidation and Reduction)",
                 borderColor: "rgb(255, 128, 128)",
                 borderWidth: 1,
                 fill: false,
-                data: typeData?.map(i => i.atmp),
+                data: typeData?.map(i => i.eh),
             },
-            {
-                type: "line" as const,
-                label: "Sea Surface Temperature (degC)",
-                borderColor: "rgb(255, 0, 128)",
-                borderWidth: 1,
-                fill: false,
-                data: typeData?.map(i => i.wtmp),
-            },
-            {
-                type: "line" as const,
-                label: "Dew Point Temperature (degC)",
-                borderColor: "rgb(128, 0, 255)",
-                borderWidth: 1,
-                fill: false,
-                data: typeData?.map(i => i.dewp),
-            },
-            {
-                type: "line" as const,
-                label: "Significant Wave Height(m)",
-                borderColor: "rgb(128, 255, )",
-                borderWidth: 1,
-                fill: false,
-                data: typeData?.map(i => i.wvht)
-            },
-            {
-                type: "line" as const,
-                label: "Dominant Wave Period (sec)",
-                borderColor: "rgb(128, 255, 128)",
-                borderWidth: 1,
-                fill: false,
-                data: typeData?.map(i => i.dpd),
-            },
-        ]
-        }
+        ]}
     }, [typeData])
 
     const options = {
@@ -167,13 +134,13 @@ export default function MeteorologicalDriftChart() {
             {pathname === "/" ?
                 <PromptUser label={"No station selected"}/>
             : !isFetched ?
-                        <MeteorologicalDriftChartLoader
-                            setTypeData={(val) => setTypeTypeData(val)}
+                        <OceanographicChartLoader
+                            setTypeData={(val) => setTypeData(val)}
                             setIsFetched={(val) => setIsFetched(val)} />
                     :
                         typeData?.length > 0 ?
                                 <Box sx={{display: "flex", width: "100%", height: "100%"}}>
-                                    <Chart type='line' data={plotData} options={options} />
+                                    <Chart type='line' data={data} options={options} />
                                 </Box>
                             :
                                 <PromptUser label={"No meteorological data found"}/>
