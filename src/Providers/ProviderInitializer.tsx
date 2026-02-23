@@ -30,8 +30,8 @@ export default function ProviderInitializer({children}:{children: React.ReactNod
     const [selOwners, setSelOwners] = useState<Set<string>>(new Set<string>());
     const [selDatatypes, setSelDatatypes] = useState<Set<string>>(new Set<string>());
     // holds all unique datatypes
-    const distinctDatatypes = new Set(["adcp", "cwind", "dart", "drift", "drift", "ocean", "rain", "spec",
-        "spectral", "srad", "supl", "txt"]);
+    const distinctDatatypes = new Set(["cwind", "dart", "drift", "drift", "ocean", "rain", "spec",
+        "srad", "supl", "txt"]);
     // holds all unique (non-dup) owners
     const [distinctOwners, setDistinctOwners] = useState<Set<string>>(new Set<string>());
     // holds all unique (non-dup) countries

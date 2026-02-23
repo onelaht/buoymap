@@ -1,0 +1,101 @@
+// react
+import {useMemo, useState} from "react";
+// ChartJS components
+import {
+    Chart as ChartJS,
+    LinearScale,
+    CategoryScale,
+    BarElement,
+    PointElement,
+    LineElement,
+    Legend,
+    Tooltip,
+    LineController,
+    BarController,
+} from 'chart.js';
+// react-chartjs-2 (ChartJS wrapper)
+import { Chart } from 'react-chartjs-2';
+// MUI components
+import {Box} from "@mui/material";
+// types and interfaces
+import type {ICWindData} from "../../../types/ICWindData.ts";
+// child component
+import ContinuousWindChartLoader from "../Loader/ChartLoader/ContinuousWindChartLoader.tsx";
+
+ChartJS.register(
+    LinearScale,
+    CategoryScale,
+    BarElement,
+    PointElement,
+    LineElement,
+    Legend,
+    Tooltip,
+    LineController,
+    BarController
+);
+
+export default function ContinuousWindChart() {
+    // typeData data set used for chartjs
+    const [typeData, setTypeData] = useState<ICWindData[]>([]);
+    // determine if data fetch is completed
+    const [isFetched, setIsFetched] = useState(false);
+    // chartjs config
+    const data = useMemo(() => {
+        return {
+            labels: typeData?.map(i => i.label),
+                datasets: [
+            {
+                type: "line" as const,
+                label: "10min Avg. Wind Direction (degT)",
+                borderColor: "rgb(255, 0, 0)",
+                borderWidth: 1,
+                fill: false,
+                data: typeData?.map(i => i.wdir),
+            },
+            {
+                type: "line" as const,
+                label: "10min Avg. Wind Speed (m/s)",
+                borderColor: "rgb(0, 0, 255)",
+                borderWidth: 1,
+                fill: false,
+                data: typeData?.map(i => i.wspd),
+            },
+            {
+                type: "line" as const,
+                label: "Direction (degT)",
+                borderColor: "rgb(0, 0, 0)",
+                borderWidth: 1,
+                fill: false,
+                data: typeData?.map(i => i.gdr),
+            },
+            {
+                type: "line" as const,
+                label: "Max 5sec Peak Gust (m/s)",
+                borderColor: "rgb(128, 0, 128)",
+                borderWidth: 1,
+                fill: false,
+                data: typeData?.map(i => i.gst),
+            },
+        ]
+        }
+    }, [typeData])
+
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+    }
+
+    return (
+        <>
+            {!isFetched ?
+                <ContinuousWindChartLoader
+                    setTypeData={(val) => setTypeData(val)}
+                    setIsFetched={(val) => setIsFetched(val)} />
+            :
+                <Box sx={{display: "flex", width: "100%", height: "100%"}}>
+                    <Chart type='line' data={data} options={options} />
+                </Box>
+            }
+        </>
+    )
+}

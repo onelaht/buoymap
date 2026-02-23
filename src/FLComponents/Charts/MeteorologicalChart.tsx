@@ -1,6 +1,6 @@
 // react
 import {useMemo, useState} from "react";
-// ChartJS componeents
+// ChartJS components
 import {
     Chart as ChartJS,
     LinearScale,
@@ -18,11 +18,9 @@ import { Chart } from 'react-chartjs-2';
 // MUI components
 import {Box} from "@mui/material";
 // types and interfaces
-import type {IMeteorologicalData} from "../../types/IMeteorologicalData.ts";
+import type {IMeteorologicalData} from "../../../types/IMeteorologicalData.ts";
 // child component
-import MeteorologicalChartLoader from "./Loader/MeteorologicalChartLoader.tsx";
-import {useLocation} from "react-router-dom";
-import PromptUser from "./Additional/PromptUser.tsx";
+import MeteorologicalChartLoader from "../Loader/ChartLoader/MeteorologicalChartLoader.tsx";
 
 ChartJS.register(
     LinearScale,
@@ -37,16 +35,14 @@ ChartJS.register(
 );
 
 export default function MeteorologicalChart() {
-    // get router path
-    const {pathname} = useLocation();
     // meteor data set used for chartjs
-    const [meteor, setMeteor] = useState<IMeteorologicalData[]>([]);
+    const [typeData, setTypeData] = useState<IMeteorologicalData[]>([]);
     // determine if data fetch is completed
     const [isFetched, setIsFetched] = useState(false);
     // chartjs config
     const data = useMemo(() => {
         return {
-            labels: meteor?.map(i => i.label),
+            labels: typeData?.map(i => i.label),
                 datasets: [
             {
                 type: "line" as const,
@@ -54,7 +50,7 @@ export default function MeteorologicalChart() {
                 borderColor: "rgb(255, 0, 0)",
                 borderWidth: 1,
                 fill: false,
-                data: meteor?.map(i => i.wdir),
+                data: typeData?.map(i => i.wdir),
             },
             {
                 type: "line" as const,
@@ -62,7 +58,7 @@ export default function MeteorologicalChart() {
                 borderColor: "rgb(0, 0, 255)",
                 borderWidth: 1,
                 fill: false,
-                data: meteor?.map(i => i.wspd),
+                data: typeData?.map(i => i.wspd),
             },
             {
                 type: "line" as const,
@@ -70,7 +66,7 @@ export default function MeteorologicalChart() {
                 borderColor: "rgb(0, 0, 0)",
                 borderWidth: 1,
                 fill: false,
-                data: meteor?.map(i => i.gst),
+                data: typeData?.map(i => i.gst),
             },
             {
                 type: "line" as const,
@@ -78,7 +74,7 @@ export default function MeteorologicalChart() {
                 borderColor: "rgb(128, 0, 128)",
                 borderWidth: 1,
                 fill: false,
-                data: meteor?.map(i => i.wvht),
+                data: typeData?.map(i => i.wvht),
             },
             {
                 type: "line" as const,
@@ -86,7 +82,7 @@ export default function MeteorologicalChart() {
                 borderColor: "rgb(0, 255, 0)",
                 borderWidth: 1,
                 fill: false,
-                data: meteor?.map(i => i.dpd),
+                data: typeData?.map(i => i.dpd),
             },
             {
                 type: "line" as const,
@@ -94,7 +90,7 @@ export default function MeteorologicalChart() {
                 borderColor: "rgb(0, 255, 255)",
                 borderWidth: 1,
                 fill: false,
-                data: meteor?.map(i => i.apd),
+                data: typeData?.map(i => i.apd),
             },
             {
                 type: "line" as const,
@@ -102,7 +98,7 @@ export default function MeteorologicalChart() {
                 borderColor: "rgb(0, 128, 255)",
                 borderWidth: 1,
                 fill: false,
-                data: meteor?.map(i => i.mwd),
+                data: typeData?.map(i => i.mwd),
             },
             {
                 type: "line" as const,
@@ -110,7 +106,7 @@ export default function MeteorologicalChart() {
                 borderColor: "rgb(128, 255, 128)",
                 borderWidth: 1,
                 fill: false,
-                data: meteor?.map(i => i.pres),
+                data: typeData?.map(i => i.pres),
             },
             {
                 type: "line" as const,
@@ -118,7 +114,7 @@ export default function MeteorologicalChart() {
                 borderColor: "rgb(255, 128, 128)",
                 borderWidth: 1,
                 fill: false,
-                data: meteor?.map(i => i.atmp),
+                data: typeData?.map(i => i.atmp),
             },
             {
                 type: "line" as const,
@@ -126,7 +122,7 @@ export default function MeteorologicalChart() {
                 borderColor: "rgb(255, 0, 128)",
                 borderWidth: 1,
                 fill: false,
-                data: meteor?.map(i => i.wtmp),
+                data: typeData?.map(i => i.wtmp),
             },
             {
                 type: "line" as const,
@@ -134,7 +130,7 @@ export default function MeteorologicalChart() {
                 borderColor: "rgb(128, 0, 255)",
                 borderWidth: 1,
                 fill: false,
-                data: meteor?.map(i => i.dewp),
+                data: typeData?.map(i => i.dewp),
             },
             {
                 type: "line" as const,
@@ -142,7 +138,7 @@ export default function MeteorologicalChart() {
                 borderColor: "rgb(128, 255, )",
                 borderWidth: 1,
                 fill: false,
-                data: meteor?.map(i => i.vis),
+                data: typeData?.map(i => i.vis),
             },
             {
                 type: "line" as const,
@@ -150,7 +146,7 @@ export default function MeteorologicalChart() {
                 borderColor: "rgb(255, 128, 64)",
                 borderWidth: 1,
                 fill: false,
-                data: meteor?.map(i => i.ptdy),
+                data: typeData?.map(i => i.ptdy),
             },
             {
                 type: "line" as const,
@@ -158,11 +154,11 @@ export default function MeteorologicalChart() {
                 borderColor: "rgb(128, 255, 128)",
                 borderWidth: 1,
                 fill: false,
-                data: meteor?.map(i => i.tide),
+                data: typeData?.map(i => i.tide),
             },
         ]
         }
-    }, [meteor])
+    }, [typeData])
 
     const options = {
         responsive: true,
@@ -173,18 +169,12 @@ export default function MeteorologicalChart() {
         <>
             {!isFetched ?
                 <MeteorologicalChartLoader
-                    setMeteor={(val) => setMeteor(val)}
+                    setTypeData={(val) => setTypeData(val)}
                     setIsFetched={(val) => setIsFetched(val)} />
             :
-                pathname === "/" ?
-                    <PromptUser label={"No station selected"}/>
-            :
-                meteor?.length > 0 ?
-                    <Box sx={{display: "flex", width: "100%", height: "100%"}}>
-                        <Chart type='line' data={data} options={options} />
-                    </Box>
-                    :
-                    <PromptUser label={"No meteorological data found"}/>
+                <Box sx={{display: "flex", width: "100%", height: "100%"}}>
+                    <Chart type='line' data={data} options={options} />
+                </Box>
             }
         </>
     )

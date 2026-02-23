@@ -59,8 +59,9 @@ export default function Filters() {
                                 </Button>
                                 <Divider sx={{mt: 1, mb: 1}} orientation="horizontal"/>
                                 {distinctCountries.size > 0 && [...distinctCountries.values()].map((i) => (
-                                    <>
+                                    <div key={i}>
                                         <FormControlLabel
+                                            key={i}
                                             control={
                                                 <Checkbox
                                                     onChange={() => handleCheckbox(i, setSelCountries)}
@@ -69,7 +70,7 @@ export default function Filters() {
                                             label={i}
                                         />
                                         <Divider sx={{mt: 1, mb: 1}} orientation="horizontal"/>
-                                    </>
+                                    </div>
                                 ))}
                             </Box>
                         </AccordionDetails>
@@ -88,14 +89,14 @@ export default function Filters() {
                                 </Button>
                                 <Divider sx={{mt: 1, mb: 1}} orientation="horizontal"/>
                                 {distinctOwners.size > 0 && [...distinctOwners.values()].map((i) => (
-                                    <>
+                                    <div key={i}>
                                         <FormControlLabel
                                             control={<Checkbox
                                                 onChange={() => handleCheckbox(i, setSelOwners)}
                                                 checked={selOwners.has(i)}/>} label={i}
                                         />
                                         <Divider sx={{mt: 1, mb: 1}} orientation="horizontal"/>
-                                    </>
+                                    </div>
                                 ))}
                             </Box>
                         </AccordionDetails>
@@ -114,14 +115,14 @@ export default function Filters() {
                                 </Button>
                                 <Divider sx={{mt: 1, mb: 1}} orientation="horizontal"/>
                                 {distinctDatatypes.size > 0 && [...distinctDatatypes.values()].map((i) => (
-                                    <>
+                                    <div key={i}>
                                         <FormControlLabel
                                             control={<Checkbox
                                                 onChange={() => handleCheckbox(i, setSelDatatypes)}
                                                 checked={selDatatypes.has(i)}/>} label={i}
                                         />
                                         <Divider sx={{mt: 1, mb: 1}} orientation="horizontal"/>
-                                    </>
+                                    </div>
                                 ))}
                             </Box>
                         </AccordionDetails>
