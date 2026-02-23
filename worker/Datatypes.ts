@@ -92,9 +92,9 @@ export class Datatypes {
                     label: `${tup[0]}-${tup[1]}-${tup[2]}-${tup[3]}-${tup[4]}`,
                     wdir: parseInt(tup[5]),
                     wspd: parseFloat(tup[6]),
-                    gdr: parseFloat(tup[7]),
-                    gst: parseFloat(tup[8]),
-                    gtime: parseInt(tup[9]),
+                    gdr: tup[7] === "999" ? undefined : parseFloat(tup[7]),
+                    gst: tup[8] === "99.0" ? undefined : parseFloat(tup[8]),
+                    gtime: tup[9] === "9999" ? undefined : parseInt(tup[9]),
                 }
                 arr.push(col);
             }
@@ -126,7 +126,7 @@ export class Datatypes {
         return arr;
     }
 
-    public static async getOceangraphicData(stationID: string):Promise<IOceanData[]> {
+    public static async getOceanographicData(stationID: string):Promise<IOceanData[]> {
         const arr: IOceanData[] = []
         // get data
         const req = await fetchData(`https://www.ndbc.noaa.gov/data/5day2/${stationID}_5day.ocean`);
@@ -208,9 +208,9 @@ export class Datatypes {
                 // push data
                 const col: ISolarRadiationData = {
                     label: `${tup[0]}-${tup[1]}-${tup[2]}-${tup[3]}-${tup[4]}`,
-                    srad1: tup[5] ? undefined : parseFloat(tup[5]),
-                    swrad: tup[6] ? undefined : parseFloat(tup[6]),
-                    lwrad: tup[7] ? undefined : parseFloat(tup[7]),
+                    srad1: tup[5] === "MM" ? undefined : parseFloat(tup[5]),
+                    swrad: tup[6] === "MM" ? undefined : parseFloat(tup[6]),
+                    lwrad: tup[7] === "MM" ? undefined : parseFloat(tup[7]),
                 }
                 arr.push(col);
             }
@@ -221,7 +221,7 @@ export class Datatypes {
     public static async getWaveSummaryData(stationID: string):Promise<IWaveSummaryData[]> {
         const arr: IWaveSummaryData[] = []
         // get data
-        const req = await fetchData(`https://www.ndbc.noaa.gov/data/5day2/${stationID}_5day.srad`);
+        const req = await fetchData(`https://www.ndbc.noaa.gov/data/5day2/${stationID}_5day.spec`);
         // return empty arr if empty
         if (req.length > 2) {
             for (let i = req.length - 2; i > 3; i--) {
