@@ -7,7 +7,7 @@ import {useLocation} from "react-router-dom";
 // child component
 import BaseLoader from "../BaseLoader.tsx";
 
-export default function SolarRadiationDataChartLoader({setTypeData, setIsFetched}:
+export default function SolarRadiationChartLoader({setTypeData, setIsFetched}:
     {setTypeData: React.Dispatch<React.SetStateAction<ISolarRadiationData[]>>,
      setIsFetched:React.Dispatch<React.SetStateAction<boolean>>}) {
     // get router path

@@ -120,7 +120,7 @@ export default {
     // return oceanographic data based provided station id
     if(path === "/api/getOCEAN/" && method === "POST") {
         const req:id_type|null = await getRequest<id_type>(request);
-        const data = req ? await Datatypes.getOceangraphicData(req.stationID) : null;
+        const data = req ? await Datatypes.getOceanographicData(req.stationID) : null;
         return new Response(JSON.stringify(data), {
             status: 200,
             headers: {"Context-Type": "application/json"}
