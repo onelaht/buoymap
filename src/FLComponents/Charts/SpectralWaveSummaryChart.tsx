@@ -15,14 +15,11 @@ import {
 } from 'chart.js';
 // react-chartjs-2 (ChartJS wrapper)
 import { Chart } from 'react-chartjs-2';
-// react router (path)
-import {useLocation} from "react-router-dom";
 // MUI components
 import {Box} from "@mui/material";
 // types and interfaces
 import type {IWaveSummaryData} from "../../../types/IWaveSummaryData.ts";
 // child component
-import PromptUser from "../Additional/PromptUser.tsx";
 import SpectralWaveSummaryChartLoader from "../Loader/ChartLoader/SpectralWaveSummaryChartLoader.tsx";
 
 ChartJS.register(
@@ -38,8 +35,6 @@ ChartJS.register(
 );
 
 export default function SpectralWaveSummaryChart() {
-    // get router path
-    const {pathname} = useLocation();
     // meteor data set used for chartjs
     const [typeData, setTypeData] = useState<IWaveSummaryData[]>([]);
     // determine if data fetch is completed
@@ -115,19 +110,14 @@ export default function SpectralWaveSummaryChart() {
 
     return (
         <>
-            {pathname === "/" ?
-                <PromptUser label={"No station selected"}/>
-            : !isFetched ?
-                        <SpectralWaveSummaryChartLoader
-                            setTypeData={(val) => setTypeData(val)}
-                            setIsFetched={(val) => setIsFetched(val)} />
-                    :
-                        typeData?.length > 0 ?
-                                <Box sx={{display: "flex", width: "100%", height: "100%"}}>
-                                    <Chart type='line' data={data} options={options} />
-                                </Box>
-                            :
-                                <PromptUser label={"No meteorological data found"}/>
+            {!isFetched ?
+                <SpectralWaveSummaryChartLoader
+                    setTypeData={(val) => setTypeData(val)}
+                    setIsFetched={(val) => setIsFetched(val)} />
+            :
+                <Box sx={{display: "flex", width: "100%", height: "100%"}}>
+                    <Chart type='line' data={data} options={options} />
+                </Box>
             }
         </>
     )

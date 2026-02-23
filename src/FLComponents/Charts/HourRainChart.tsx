@@ -15,14 +15,11 @@ import {
 } from 'chart.js';
 // react-chartjs-2 (ChartJS wrapper)
 import { Chart } from 'react-chartjs-2';
-// react router (path)
-import {useLocation} from "react-router-dom";
 // MUI components
 import {Box} from "@mui/material";
 // types and interfaces
 import type {IHourlyRainData} from "../../../types/IHourlyRainData.ts";
 // child component
-import PromptUser from "../Additional/PromptUser.tsx";
 import HourlyRainChartLoader from "../Loader/ChartLoader/HourlyRainChartLoader.tsx";
 
 ChartJS.register(
@@ -38,8 +35,6 @@ ChartJS.register(
 );
 
 export default function HourRainChart() {
-    // get router path
-    const {pathname} = useLocation();
     // typeData data set used for chartjs
     const [typeData, setTypeData] = useState<IHourlyRainData[]>([]);
     // determine if data fetch is completed
@@ -68,16 +63,14 @@ export default function HourRainChart() {
 
     return (
         <>
-            {pathname === "/" ?
-                <PromptUser label={"No station selected"}/>
-            : !isFetched ?
-                        <HourlyRainChartLoader
-                            setTypeData={(val) => setTypeData(val)}
-                            setIsFetched={(val) => setIsFetched(val)} />
-                    :
-                        <Box sx={{display: "flex", width: "100%", height: "100%"}}>
-                            <Chart type='line' data={data} options={options} />
-                        </Box>
+            {!isFetched ?
+                <HourlyRainChartLoader
+                    setTypeData={(val) => setTypeData(val)}
+                    setIsFetched={(val) => setIsFetched(val)} />
+            :
+                <Box sx={{display: "flex", width: "100%", height: "100%"}}>
+                    <Chart type='line' data={data} options={options} />
+                </Box>
             }
         </>
     )

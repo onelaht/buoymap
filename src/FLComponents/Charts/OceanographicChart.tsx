@@ -15,14 +15,11 @@ import {
 } from 'chart.js';
 // react-chartjs-2 (ChartJS wrapper)
 import { Chart } from 'react-chartjs-2';
-// react router (path)
-import {useLocation} from "react-router-dom";
 // MUI components
 import {Box} from "@mui/material";
 // types and interfaces
 import type {IOceanData} from "../../../types/IOceanData.ts";
 // child component
-import PromptUser from "../Additional/PromptUser.tsx";
 import OceanographicChartLoader from "../Loader/ChartLoader/OceanographicChartLoader.tsx";
 
 ChartJS.register(
@@ -38,8 +35,6 @@ ChartJS.register(
 );
 
 export default function OceanographicChart() {
-    // get router path
-    const {pathname} = useLocation();
     // meteor data set used for chartjs
     const [typeData, setTypeData] = useState<IOceanData[]>([]);
     // determine if data fetch is completed
@@ -131,19 +126,14 @@ export default function OceanographicChart() {
 
     return (
         <>
-            {pathname === "/" ?
-                <PromptUser label={"No station selected"}/>
-            : !isFetched ?
-                        <OceanographicChartLoader
-                            setTypeData={(val) => setTypeData(val)}
-                            setIsFetched={(val) => setIsFetched(val)} />
-                    :
-                        typeData?.length > 0 ?
-                                <Box sx={{display: "flex", width: "100%", height: "100%"}}>
-                                    <Chart type='line' data={data} options={options} />
-                                </Box>
-                            :
-                                <PromptUser label={"No meteorological data found"}/>
+            {!isFetched ?
+                <OceanographicChartLoader
+                    setTypeData={(val) => setTypeData(val)}
+                    setIsFetched={(val) => setIsFetched(val)} />
+            :
+                <Box sx={{display: "flex", width: "100%", height: "100%"}}>
+                    <Chart type='line' data={data} options={options} />
+                </Box>
             }
         </>
     )

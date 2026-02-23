@@ -15,14 +15,11 @@ import {
 } from 'chart.js';
 // react-chartjs-2 (ChartJS wrapper)
 import { Chart } from 'react-chartjs-2';
-// react router (path)
-import {useLocation} from "react-router-dom";
 // MUI components
 import {Box} from "@mui/material";
 // types and interfaces
 import type {IMeteorologicalDriftData} from "../../../types/IMeteorologicalDriftData.ts";
 // child component
-import PromptUser from "../Additional/PromptUser.tsx";
 import MeteorologicalDriftChartLoader from "../Loader/ChartLoader/MeteorologicalDriftChartLoader.tsx";
 
 ChartJS.register(
@@ -38,8 +35,6 @@ ChartJS.register(
 );
 
 export default function MeteorologicalDriftChart() {
-    // get router path
-    const {pathname} = useLocation();
     // meteor data set used for chartjs
     const [typeData, setTypeTypeData] = useState<IMeteorologicalDriftData[]>([]);
     // determine if data fetch is completed
@@ -164,19 +159,14 @@ export default function MeteorologicalDriftChart() {
 
     return (
         <>
-            {pathname === "/" ?
-                <PromptUser label={"No station selected"}/>
-            : !isFetched ?
-                        <MeteorologicalDriftChartLoader
-                            setTypeData={(val) => setTypeTypeData(val)}
-                            setIsFetched={(val) => setIsFetched(val)} />
-                    :
-                        typeData?.length > 0 ?
-                                <Box sx={{display: "flex", width: "100%", height: "100%"}}>
-                                    <Chart type='line' data={plotData} options={options} />
-                                </Box>
-                            :
-                                <PromptUser label={"No meteorological data found"}/>
+            {!isFetched ?
+                <MeteorologicalDriftChartLoader
+                    setTypeData={(val) => setTypeTypeData(val)}
+                    setIsFetched={(val) => setIsFetched(val)} />
+            :
+                <Box sx={{display: "flex", width: "100%", height: "100%"}}>
+                    <Chart type='line' data={plotData} options={options} />
+                </Box>
             }
         </>
     )
