@@ -2,14 +2,14 @@
 Interactive web dashboard for mapping, filtering, and charting National Data Buoy Center (NDBC) data    
 
 ##  Production Build  
- - `https://buoymap.onelaht.workers.dev/`  
+ - https://buoymap.onelaht.workers.dev/
 
 ## Development Build  
 
 ### Prerequisites  
 
 #### Configure NodeJS (npm)  
-- `https://nodejs.org/en/download/current`  
+- https://nodejs.org/en/download/current
 
 ### Running client and server  
 
@@ -24,4 +24,4 @@ Interactive web dashboard for mapping, filtering, and charting National Data Buo
 
 #### 4. Run development build  
 - `npm run dev`  
-- Open `localhost:5173/` via browser  
+- Open [localhost:5173](http://localhost:5173) via browser  
